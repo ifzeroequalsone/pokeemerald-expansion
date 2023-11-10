@@ -2,12 +2,14 @@
 #include "main.h"
 #include "credits.h"
 #include "event_data.h"
+#include "pokedex.h"
 #include "hall_of_fame.h"
 #include "load_save.h"
 #include "overworld.h"
 #include "script_pokemon_util.h"
 #include "tv.h"
 #include "constants/heal_locations.h"
+#include "field_screen_effect.h"
 
 int GameClear(void)
 {
@@ -82,6 +84,18 @@ int GameClear(void)
     }
 
     SetMainCallback2(CB2_DoHallOfFameScreen);
+    return 0;
+}
+
+int FakeGameClear(void)
+{
+    ZeroPlayerPartyMons();
+    ResetPokedex();
+    // TODO DND Set Continue Warp to Heal Location NEW MAP AFTER BATTLE
+    SetWarpDestination(MAP_GROUP(DESTROYED_CITY_MAIN_HALL), MAP_NUM(DESTROYED_CITY_MAIN_HALL), 0, -2, -1);
+    WarpIntoMap();
+    gFieldCallback = FieldCB_WarpExitFadeFromBlack;
+    SetMainCallback2(CB2_LoadMap);
     return 0;
 }
 
